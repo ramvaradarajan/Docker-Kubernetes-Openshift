@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9
+FROM python:3.8-alpine
 
 # Set the working directory to /app
 WORKDIR /app
@@ -11,4 +11,4 @@ COPY . /app
 RUN pip install --no-cache-dir flask redis
 
 # Run the Python application
-CMD [ "python", "app.py" ]
+CMD [ "python", "example.py" ]

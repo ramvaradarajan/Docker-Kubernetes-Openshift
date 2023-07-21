@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: brainstrom/secrets:1.0
+          image: <your-registry>/flask-app:v1
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
           env:
             - name: API_KEY
               valueFrom:

@@ -8,10 +8,10 @@ WORKDIR /app
 COPY . /app
 
 # Install the required dependencies
-# RUN pip install --no-cache-dir -r requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
 
 # Set the environment variable for the application
 ENV CONFIG_VALUE=default_value
 
 # Run the Python application
-CMD [ "python", "example.py" ]
+CMD [ "python", "app.py" ]

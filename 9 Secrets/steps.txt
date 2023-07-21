@@ -1,0 +1,18 @@
+docker build -t <your-registry>/flask-app:v1 .
+docker push <your-registry>/flask-app:v1
+
+
+echo -n "your-api-key-here" | base64
+
+
+kubectl apply -f api-key-secret.yaml
+kubectl apply -f flask-deployment.yaml
+
+
+kubectl apply -f flask-service.yaml
+
+
+minikube service flask-app-service --url
+
+
+curl <external-ip-address>

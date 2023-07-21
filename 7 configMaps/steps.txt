@@ -1,0 +1,12 @@
+docker build -t <your-registry>/my-python-app:v1 .
+docker push <your-registry>/my-python-app:v1
+
+
+kubectl apply -f config.yaml
+
+
+kubectl apply -f deployment.yaml
+
+
+kubectl logs <pod-name>
+

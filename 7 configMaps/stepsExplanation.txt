@@ -1,0 +1,116 @@
+Sure! Let's walk through a detailed example of using ConfigMaps in Kubernetes with a Python application.
+
+Assume you have a simple Python application that requires some configuration settings, such as a database URL or an API key. Instead of hardcoding these values into your application code, you can use a ConfigMap to store and manage these configuration settings externally.
+
+Step 1: Python Application
+Let's create a simple Python application that reads a configuration value from an environment variable and prints it. Create a file named `app.py` with the following content:
+
+```python
+import os
+
+config_value = os.environ.get("CONFIG_VALUE", "default_value")
+print("Config Value:", config_value)
+```
+
+Step 2: Dockerize the Python Application
+Next, we need to create a Docker image for our Python application. Create a `Dockerfile` with the following content in the same directory as `app.py`:
+
+```Dockerfile
+# Use an official Python runtime as a parent image
+FROM python:3.9
+
+# Set the working directory to /app
+WORKDIR /app
+
+# Copy the current directory contents into the container at /app
+COPY . /app
+
+# Install the required dependencies
+RUN pip install --no-cache-dir -r requirements.txt
+
+# Set the environment variable for the application
+ENV CONFIG_VALUE=default_value
+
+# Run the Python application
+CMD [ "python", "app.py" ]
+```
+
+Step 3: Build and Push the Docker Image
+Build the Docker image and push it to a container registry of your choice. Replace `<your-registry>` with your actual container registry (e.g., Docker Hub, Google Container Registry, or Amazon ECR):
+
+```bash
+docker build -t <your-registry>/my-python-app:v1 .
+docker push <your-registry>/my-python-app:v1
+```
+
+Step 4: Create the ConfigMap in Kubernetes
+Now, let's create a ConfigMap to store the configuration value for our Python application. Create a file named `config.yaml` with the following content:
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-config
+data:
+  CONFIG_VALUE: my_config_value_from_config_map
+```
+
+In this example, we are setting the `CONFIG_VALUE` key in the ConfigMap to the value `my_config_value_from_config_map`. You can replace this with your actual configuration value.
+
+Apply the ConfigMap to your Kubernetes cluster:
+
+```bash
+kubectl apply -f config.yaml
+```
+
+Step 5: Deploy the Python Application
+Finally, create a Kubernetes deployment to run your Python application using the ConfigMap. Create a file named `deployment.yaml` with the following content:
+
+```yaml
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: my-python-app
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: my-python-app
+  template:
+    metadata:
+      labels:
+        app: my-python-app
+    spec:
+      containers:
+        - name: my-python-app
+          image: <your-registry>/my-python-app:v1
+          env:
+            - name: CONFIG_VALUE
+              valueFrom:
+                configMapKeyRef:
+                  name: my-config
+                  key: CONFIG_VALUE
+```
+
+Replace `<your-registry>` with your actual container registry as before. This deployment uses the ConfigMap `my-config` to set the `CONFIG_VALUE` environment variable in the container.
+
+Apply the deployment to your Kubernetes cluster:
+
+```bash
+kubectl apply -f deployment.yaml
+```
+
+Step 6: Verify the Output
+After a few moments, the deployment should be running. To verify that the configuration value from the ConfigMap is being used by the application, check the logs of the pod:
+
+```bash
+kubectl logs <pod-name>
+```
+
+You should see the output:
+
+```
+Config Value: my_config_value_from_config_map
+```
+
+Congratulations! You have successfully used a ConfigMap to configure a Python application deployed in Kubernetes. This method allows you to manage the configuration separately from the application code and makes it easier to update configurations without rebuilding the application container.
