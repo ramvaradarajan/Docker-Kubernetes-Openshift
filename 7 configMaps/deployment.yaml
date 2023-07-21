@@ -3,7 +3,7 @@ kind: Deployment
 metadata:
   name: my-python-app
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: my-python-app
@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: my-python-app
-          image: <your-registry>/my-python-app:v1
+          image: brainstrom/python-configmap:1.0
           env:
             - name: CONFIG_VALUE
               valueFrom:

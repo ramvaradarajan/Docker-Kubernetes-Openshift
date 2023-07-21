@@ -1,5 +1,5 @@
 # Use an official Python runtime as a parent image
-FROM python:3.9
+FROM python:3.8-alpine
 
 # Set the working directory to /app
 WORKDIR /app
@@ -7,8 +7,13 @@ WORKDIR /app
 # Copy the current directory contents into the container at /app
 COPY . /app
 
+RUN pip install flask
+
+COPY . /app
+
 # Install the required dependencies
-RUN pip install --no-cache-dir flask redis
+RUN pip install redis
+
 
 # Run the Python application
-CMD [ "python", "app.py" ]
+CMD [ "python", "example.py" ]

@@ -14,9 +14,9 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: <your-registry>/flask-app:v1   # Replace <your-registry> with your container registry
+          image: brainstrom/multi:2.0   # Replace <your-registry> with your container registry
           ports:
-            - containerPort: 8080
+            - containerPort: 3000
           env:
             - name: REDIS_HOST
-              value: "redis"
+              value: "localhost"
