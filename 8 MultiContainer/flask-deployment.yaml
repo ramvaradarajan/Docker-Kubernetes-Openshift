@@ -14,9 +14,13 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: brainstrom/multi:2.0   # Replace <your-registry> with your container registry
+          image: <your-registry>/flask-app:v1
           ports:
-            - containerPort: 3000
+            - containerPort: 8080
           env:
             - name: REDIS_HOST
-              value: "localhost"
+              value: "localhost"  # Use "localhost" as the Redis host since both containers are in the same pod.
+        - name: redis
+          image: redis:latest
+          ports:
+            - containerPort: 6379
